@@ -22,9 +22,6 @@
   when: is_etcd_master
   tags: upgrade
 
-- include: set_cluster_health.yml
-  when: is_etcd_master and etcd_cluster_setup
-
 - include: configure.yml
   when: is_etcd_master and etcd_cluster_setup
 
@@ -35,6 +32,9 @@
   command: /bin/true
   notify: restart etcd
   when: is_etcd_master and etcd_secret_changed|default(false)
+
+- include: set_cluster_health.yml
+  when: is_etcd_master and etcd_cluster_setup
 
 # reload-systemd
 - meta: flush_handlers
